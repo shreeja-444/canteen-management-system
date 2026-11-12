@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f7f3">
+  <meta name="description" content="A smart campus canteen for menus, table reservations, food orders, and live queue estimates.">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Common Table">
+  <title>Common Table — Smart Canteen</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/app-icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/app-icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#home" data-view-link="home" aria-label="Common Table home">
+      <span class="brand-mark" aria-hidden="true">ct<span>.</span></span>
+      <span>common<span class="brand-light">table</span><small>CAMPUS CANTEEN</small></span>
+    </a>
+    <nav class="main-nav" aria-label="Main navigation">
+      <button class="nav-link active" data-view-link="home">Overview</button>
+      <button class="nav-link" data-view-link="menu">Menu</button>
+      <button class="nav-link" data-view-link="tables">Tables</button>
+      <button class="nav-link" data-view-link="orders">My orders</button>
+      <button class="nav-link" data-view-link="admin">Admin</button>
+    </nav>
+    <div class="top-actions">
+      <button class="icon-button" id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">◐</button>
+      <button class="profile-button" id="profileButton" aria-label="Sign in or view your account"><span class="avatar" id="headerAvatar">G</span><span id="headerUser">Guest</span></button>
+      <button class="install-button" id="installApp" hidden>Install app</button>
+      <button class="cart-button" id="openCart" aria-label="Open cart">Bag <span id="cartCount">0</span></button>
+      <button class="menu-toggle" id="mobileMenuToggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <div class="announcement-bar" id="announcementBar"><span class="live-dot"></span><span id="announcementText">Freshly made, right here on campus.</span><span class="hours-note" id="hoursNote">Open today</span></div>
+
+    <section class="view active" id="view-home" data-view="home">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="live-dot"></span> YOUR CAMPUS, SERVED FRESH</p>
+          <h1>Good food.<br><span>Zero guesswork.</span></h1>
+          <p>See what's cooking, skip the queue, and find your spot around the table.</p>
+          <div class="hero-actions"><button class="button button-dark" data-view-link="menu">Explore the menu <span aria-hidden="true">↗</span></button><button class="button button-quiet" data-view-link="tables">Find a table</button></div>
+          <div class="hero-footnote"><span class="avatar-stack" aria-hidden="true"><i>A</i><i>S</i><i>R</i></span><span>Made with care, served with a smile.</span></div>
+        </div>
+        <div class="hero-art" role="img" aria-label="Fresh campus lunch bowl">
+          <div class="hero-image"></div>
+          <div class="hero-sticker"><span>✳</span> GOOD FOOD<br>GOOD MOOD</div>
+          <div class="hero-caption"><span class="caption-dot"></span><span><b>Today's special</b><br>Paneer rice bowl <strong>₹149</strong></span></div>
+        </div>
+      </section>
+
+      <section class="stats-grid" aria-label="Canteen overview">
+        <article class="stat-card"><span class="stat-icon mint">⌂</span><div><p>Tables free</p><strong id="statVacant">—</strong><small id="statTablesTotal">of — tables</small></div><span class="stat-tail">↗</span></article>
+        <article class="stat-card"><span class="stat-icon peach">◷</span><div><p>In the kitchen</p><strong id="statOrders">—</strong><small>active orders</small></div><span class="stat-tail">↗</span></article>
+        <article class="stat-card"><span class="stat-icon lilac">♧</span><div><p>Queue vibe</p><strong id="statCrowd">—</strong><small id="statQueue">— waiting</small></div><span class="stat-tail">✳</span></article>
+        <article class="stat-card"><span class="stat-icon yellow">⌁</span><div><p>Avg. wait</p><strong id="statWait">—</strong><small>minutes · estimate</small></div><span class="stat-tail">↗</span></article>
+      </section>
+
+      <section class="content-section">
+        <div class="section-heading"><div><p class="eyebrow">THE GOOD STUFF</p><h2>Popular right now</h2></div><button class="text-button" data-view-link="menu">Full menu <span>→</span></button></div>
+        <div class="food-grid" id="featuredMenu"></div>
+      </section>
+
+      <section class="home-bottom">
+        <article class="queue-card">
+          <div class="queue-top"><span class="queue-icon">↗</span><span class="pill pill-light">QUEUE CHECK</span></div>
+          <h2>Your break,<br>back on track.</h2>
+          <p>Place an order to get a live token and an honest estimate while you wait.</p>
+          <button class="button button-light" data-view-link="orders">Track an order <span>→</span></button>
+          <span class="queue-decoration">01</span>
+        </article>
+        <article class="table-teaser">
+          <div class="section-heading compact"><div><p class="eyebrow">PULL UP A CHAIR</p><h2>Find your place.</h2></div><span class="table-doodle" aria-hidden="true">✳</span></div>
+          <p>Check the floor before you go. Reserve an open table for you and your crew.</p>
+          <div class="table-teaser-bottom"><div><strong id="teaserVacant">—</strong><span>spots open now</span></div><button class="button button-dark" data-view-link="tables">See the tables <span>→</span></button></div>
+        </article>
+      </section>
+      <p class="demo-note">A friendly prototype, not a live booking or payment service. Queue and availability are estimates based on demo data.</p>
+    </section>
+
+    <section class="view" id="view-menu" data-view="menu" hidden>
+      <div class="page-heading"><div><p class="eyebrow">MADE FRESH ON CAMPUS</p><h1>Something <span>good?</span></h1><p>Find your favorite, or let a new one find you.</p></div><button class="button button-dark" id="menuCartShortcut">Your bag <span id="menuCartCount">0</span></button></div>
+      <div class="menu-tools"><label class="search-box"><span aria-hidden="true">⌕</span><input id="menuSearch" type="search" placeholder="Find something delicious…" autocomplete="off"></label><label class="sort-control">Sort by <select id="menuSort"><option value="popular">Most loved</option><option value="price-asc">Price: low to high</option><option value="price-desc">Price: high to low</option><option value="name">Name: A to Z</option></select></label></div>
+      <div class="category-list" id="categoryList" aria-label="Filter menu by category"></div>
+      <div class="menu-result-line"><span id="menuResultCount"></span><span class="stock-key"><i class="stock-dot"></i> Freshly available</span></div>
+      <div class="food-grid menu-grid" id="menuGrid"></div>
+    </section>
+
+    <section class="view" id="view-tables" data-view="tables" hidden>
+      <div class="page-heading"><div><p class="eyebrow">A PLACE FOR EVERYONE</p><h1>Pull up a <span>chair.</span></h1><p>See what's open and save a seat for your next meal.</p></div><div class="crowd-badge"><span class="live-dot"></span><span><small>RIGHT NOW</small><b id="tableCrowd">Checking…</b></span></div></div>
+      <div class="table-summary" id="tableSummary"></div>
+      <div class="table-legend"><span><i class="legend-dot available"></i> Available</span><span><i class="legend-dot occupied"></i> Occupied</span><span><i class="legend-dot reserved"></i> Reserved</span></div>
+      <div class="table-grid" id="tableGrid"></div>
+      <p class="demo-note">Reservations are a local demo only. A reservation you make is saved to this browser and marked with your initials.</p>
+    </section>
+
+    <section class="view" id="view-orders" data-view="orders" hidden>
+      <div class="page-heading"><div><p class="eyebrow">FROM ORDER TO PICKUP</p><h1>Keep your <span>break moving.</span></h1><p>Track your token, queue spot, and estimated pickup time.</p></div><button class="button button-dark" data-view-link="menu">Order something <span>↗</span></button></div>
+      <div id="personalOrders"></div>
+      <div class="content-section history-section"><div class="section-heading"><div><p class="eyebrow">YOUR CANTEEN DAYS</p><h2>Order history</h2></div></div><div id="orderHistory"></div></div>
+      <p class="demo-note">Wait times use menu prep estimates and the current demo queue. Pre-orders show the pickup time you selected.</p>
+    </section>
+
+    <section class="view login-view" id="view-login" data-view="login" hidden>
+      <div class="login-layout">
+        <div class="login-aside">
+          <a class="login-back" href="#home" data-view-link="home">← Back to the canteen</a>
+          <p class="eyebrow">YOUR CAMPUS, SERVED FRESH</p>
+          <h1>Good food.<br><span>Good to see you.</span></h1>
+          <p>Sign in to keep your orders, pickup times, and table reservations together.</p>
+          <div class="login-benefits"><span>01 <b>Follow your order queue</b></span><span>02 <b>Save a seat at your table</b></span><span>03 <b>Order your favorites again</b></span></div>
+        </div>
+        <section class="surface-card login-card" id="loginCard" aria-live="polite"></section>
+      </div>
+      <p class="demo-note login-note">Demo account details are stored only in this browser. Do not use a real password.</p>
+    </section>
+
+    <section class="view" id="view-profile" data-view="profile" hidden>
+      <div class="page-heading"><div><p class="eyebrow">YOUR CAMPUS ACCOUNT</p><h1>Your <span>corner.</span></h1><p>Sign in on this browser to keep your orders and reservations together.</p></div></div>
+      <div class="profile-layout">
+        <section class="surface-card" id="authCard"></section>
+        <section class="surface-card" id="profileDetails"></section>
+      </div>
+      <section class="surface-card feedback-card"><div><p class="eyebrow">HELP US MAKE IT BETTER</p><h2>How was your last bite?</h2><p>Your feedback stays in this browser demo.</p></div><form id="feedbackForm"><label>Rating<select id="feedbackRating" required><option value="">Choose a rating</option><option value="5">★★★★★ — Loved it</option><option value="4">★★★★☆ — Really good</option><option value="3">★★★☆☆ — It was okay</option><option value="2">★★☆☆☆ — Could be better</option><option value="1">★☆☆☆☆ — Not for me</option></select></label><label>Anything you'd like us to know?<textarea id="feedbackText" rows="3" maxlength="300" placeholder="Tell us about the food, the vibe, or anything else…"></textarea></label><button class="button button-dark" type="submit">Send feedback <span>→</span></button><p class="form-message" id="feedbackMessage" aria-live="polite"></p></form></section>
+    </section>
+
+    <section class="view" id="view-admin" data-view="admin" hidden>
+      <div class="page-heading"><div><p class="eyebrow">CANTEEN OPERATIONS · DEMO</p><h1>Behind the <span>counter.</span></h1><p>Manage today's menu, orders, tables, and canteen updates.</p></div><span class="admin-badge">DEMO ADMIN</span></div>
+      <div class="admin-disclaimer"><span>ⓘ</span><p>Admin controls are open for this prototype. This is not secure authentication—production admin access must be protected by a backend.</p></div>
+      <div class="admin-stats" id="adminStats"></div>
+      <div class="admin-grid">
+        <section class="surface-card admin-wide"><div class="section-heading"><div><p class="eyebrow">TODAY'S SERVICE</p><h2>Orders & queue</h2></div></div><div class="admin-table-wrap" id="adminOrders"></div></section>
+        <section class="surface-card"><div class="section-heading"><div><p class="eyebrow">ON THE FLOOR</p><h2>Table status</h2></div></div><div class="admin-table-wrap" id="adminTables"></div></section>
+        <section class="surface-card"><div class="section-heading"><div><p class="eyebrow">KITCHEN PREP</p><h2>Update the menu</h2></div></div><form class="admin-form" id="menuItemForm"><input type="hidden" id="itemId"><label>Item name<input id="itemName" required maxlength="55" placeholder="e.g. Mango lassi"></label><label>Category<select id="itemCategory" required></select></label><label>Price (₹)<input id="itemPrice" type="number" min="1" max="9999" step="1" required placeholder="60"></label><label>Prep time (min)<input id="itemPrep" type="number" min="1" max="120" step="1" required value="10"></label><label>Stock<input id="itemStock" type="number" min="0" max="9999" step="1" required value="20"></label><label>Description<input id="itemDescription" maxlength="100" placeholder="A little something delicious"></label><label>Image URL<input id="itemImage" type="url" placeholder="https://… (optional)"></label><label class="checkbox-line"><input id="itemAvailable" type="checkbox" checked> Available to order</label><div class="form-actions"><button class="button button-dark" id="saveMenuItem" type="submit">Add menu item <span>+</span></button><button class="button button-quiet" id="cancelMenuEdit" type="button" hidden>Cancel edit</button></div></form><div id="adminMenuList" class="admin-menu-list"></div></section>
+        <section class="surface-card"><div class="section-heading"><div><p class="eyebrow">LET PEOPLE KNOW</p><h2>Service details</h2></div></div><form class="admin-form" id="serviceForm"><label>Opening time<input id="openingTime" type="time" required></label><label>Closing time<input id="closingTime" type="time" required></label><label>Announcement<input id="serviceAnnouncement" maxlength="120" placeholder="Today's special is on!"></label><button class="button button-dark" type="submit">Save service details <span>→</span></button><p class="form-message" id="serviceMessage" aria-live="polite"></p></form><hr class="soft-rule"><p class="eyebrow">DEMO DATA</p><p class="small-copy">Start over with the sample canteen, menu, and queue.</p><button class="button button-danger" id="resetDemo">Reset demo data</button></section>
+      </div>
+    </section>
+  </main>
+
+  <div class="cart-backdrop" id="cartBackdrop" hidden></div>
+  <aside class="cart-drawer" id="cartDrawer" aria-label="Your bag" aria-hidden="true">
+    <div class="drawer-heading"><div><p class="eyebrow">YOUR ORDER</p><h2>Your bag <span id="drawerCartCount">0</span></h2></div><button class="icon-button" id="closeCart" aria-label="Close bag">×</button></div>
+    <div class="cart-items" id="cartItems"></div>
+    <div class="cart-checkout">
+      <label>How are you enjoying it?<select id="orderType"><option value="Takeaway">Takeaway</option><option value="Dine-in">Dine-in</option><option value="Pre-order">Pre-order</option></select></label>
+      <label id="checkoutTableLabel" hidden>Choose a free table<select id="checkoutTable"></select></label>
+      <label id="preorderPickupLabel" hidden>Pickup date & time<input id="preorderPickupTime" type="datetime-local" step="60"><small>Choose a time at least 10 minutes from now.</small></label>
+      <label>Pay with<select id="paymentMethod"><option value="Cash">Cash at counter</option><option value="UPI">UPI (simulated)</option></select></label>
+      <p class="payment-note" id="paymentNote">Cash payment is marked pending until paid at the counter.</p>
+      <div class="bill-lines"><div><span>Subtotal</span><span id="cartSubtotal">₹0</span></div><div><span>Campus service · 5%</span><span id="cartTax">₹0</span></div><div class="bill-total"><strong>Total</strong><strong id="cartTotal">₹0</strong></div></div>
+      <button class="button button-dark checkout-button" id="checkoutButton">Place my order <span>→</span></button>
+      <small>Prototype checkout only. No real payments are collected.</small>
+    </div>
+  </aside>
+
+  <div class="modal-backdrop" id="modalBackdrop" hidden>
+    <section class="reservation-modal" role="dialog" aria-modal="true" aria-labelledby="reservationTitle">
+      <button class="icon-button modal-close" id="closeModal" aria-label="Close reservation">×</button>
+      <p class="eyebrow">SAVE YOUR SPOT</p><h2 id="reservationTitle">Reserve a table</h2><p class="modal-copy" id="reservationDescription">Choose how many seats you need.</p>
+      <form id="reservationForm"><input type="hidden" id="reservationTableId"><label>Seats needed<select id="reservationSeats" required></select></label><button class="button button-dark" type="submit">Reserve this table <span>→</span></button></form>
+    </section>
+  </div>
+
+  <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="true"></div>
+  <footer class="site-footer"><a class="brand footer-brand" href="#home" data-view-link="home"><span class="brand-mark">ct<span>.</span></span><span>common<span class="brand-light">table</span><small>CAMPUS CANTEEN</small></span></a><p>Better breaks, one bowl at a time.</p><span>LOCAL DEMO · DATA STAYS IN THIS BROWSER</span></footer>
+  <script src="script.js"></script>
+</body>
+</html>
